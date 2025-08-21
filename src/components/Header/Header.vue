@@ -5,7 +5,10 @@
         <img class="w-auto h-3/5 object-contain" src="@/assets/images/logo.webp" />
         <a class="text-lg font-bold" href="/">{{ props.title }}</a>
       </div>
-      <h3 class="w-max h-max text-sm text-foreground/60 hidden sm:block">{{ props.desc }}</h3>
+      <div class="flex items-center gap-4">
+        <router-link to="/manage" class="text-sm">管理</router-link>
+        <h3 class="w-max h-max text-sm text-foreground/60 hidden sm:block">{{ props.desc }}</h3>
+      </div>
     </div>
   </header>
 </template>
