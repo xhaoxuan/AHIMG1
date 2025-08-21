@@ -23,6 +23,9 @@
           </Label>
         </RadioGroup>
       </div>
+      <div class="ml-4">
+        <Input v-model="secretKey" placeholder="请输入密钥" />
+      </div>
     </div>
     <!-- 上传 -->
     <Upload v-model="fileList" :UploadConfig="UploadConfig" :uploadAPI="uploadAPI" />
@@ -32,8 +35,9 @@
   </section>
 </template>
 <script setup lang="ts">
+import { Input } from '@/components/ui/input';
 import vh from 'vh-plugin';
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { formatURL } from '@/utils/index';
 import { Button } from '@/components/ui/button';
 import Upload from '@/components/Upload/Upload.vue';
@@ -44,8 +48,10 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 // IPFS节点
 const nodeHost = ref<string>(import.meta.env.VITE_IMG_API_URL || location.origin);
+// 密钥
+const secretKey = ref<string>('');
 // 上传接口
-const uploadAPI = ref<string>(`${import.meta.env.VITE_IMG_API_URL || location.origin}/upload`);
+const uploadAPI = computed(() => `${import.meta.env.VITE_IMG_API_URL || location.origin}/upload?key=${secretKey.value}`);
 // 上传配置
 const UploadConfig = ref<any>({
   AcceptTypes: 'image/*', // 允许上传的类型，使用逗号分隔
