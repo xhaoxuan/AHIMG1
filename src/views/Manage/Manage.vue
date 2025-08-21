@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/ui/input/index';
 import { Button } from '@/components/ui/button';
 
 const secretKey = ref('');
