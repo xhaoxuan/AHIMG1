@@ -1,11 +1,18 @@
-export async function onRequest({ request }) {
+export async function onRequest({ request, env }) {
   const { method } = request
+  const url = new URL(request.url)
+  const key = url.searchParams.get('key')
+
+  if (!key) {
+    return new Response('Secret key is required', { status: 400 })
+  }
+
   const formData = await request.formData()
   const imgFile = formData.get('file')
   // 创建 FormData 对象
   const body = new FormData()
   body.append('image', imgFile)
-  return fetch(`https://api.imgur.com/3/upload?client_id=546c25a59c58ad7`, {
+  const uploadResponse = await fetch(`https://api.imgur.com/3/upload?client_id=546c25a59c58ad7`, {
     method,
     headers: {
       ...request.headers,
@@ -14,5 +21,25 @@ export async function onRequest({ request }) {
       Authorization: 'Client-ID 546c25a59c58ad7'
     },
     body
+  })
+
+  const uploadResult = await uploadResponse.json()
+
+  if (uploadResult.success) {
+    const imageUrl = uploadResult.data.link
+    let imageList = await env.IMG_KV.get(key)
+    if (imageList) {
+      imageList = JSON.parse(imageList)
+    } else {
+      imageList = []
+    }
+    imageList.push(imageUrl)
+    await env.IMG_KV.put(key, JSON.stringify(imageList))
+  }
+
+  return new Response(JSON.stringify(uploadResult), {
+    headers: {
+      'Content-Type': 'application/json'
+    }
   })
 }
