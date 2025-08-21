@@ -35,7 +35,7 @@
   </section>
 </template>
 <script setup lang="ts">
-import { Input } from '@/components/ui/input/index';
+import Input from '@/components/ui/input/Input.vue';
 import vh from 'vh-plugin';
 import { ref, watch, computed } from 'vue';
 import { formatURL } from '@/utils/index';
